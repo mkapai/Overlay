@@ -1,0 +1,36 @@
+name: Xmake single Ubuntu24.04
+
+on:
+  push:
+    tags:
+     - "v*"
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: xmake-io/github-action-setup-xmake@v1
+      with:
+        xmake-version: latest
+    - name: install_vulkan_sdk
+      run: |
+        sudo apt update -y
+        sudo apt install -y libvulkan1 libvulkan-dev vulkan-tools vulkan-validationlayers mesa-vulkan-drivers
+    - run: cd ${{ github.workspace }}
+    - name: SetConfig
+      run: xmake config -m release -y -v
+    - name: build
+      run: xmake -v -y
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ github.ref_name }}
+        name: compile ${{ github.ref_name }}
+        files: build/linux/x86_64/release/*
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
