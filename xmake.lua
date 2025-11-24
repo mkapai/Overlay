@@ -1,15 +1,14 @@
 add_rules("mode.debug", "mode.release")
 
 add_requires("vulkansdk")
-add_requires("glfw",{configs={wayland=true}})
-add_requires("imgui v1.91.0-docking",{configs={glfw_vulkan=true,freetype=false  }})
+if is_plat("linux") then
+    add_requires("glfw",{configs={wayland=true}})
+else
+    add_requires("glfw")
+end
 target("Overlay")
     set_languages("c99","c++20")
     set_kind("binary")
-
-
-
-
 
     if is_plat("windows") then
         --set_runtimes("MT")
@@ -17,9 +16,9 @@ target("Overlay")
        
     end
     
-    --add_includedirs("src/**.h","src/**.hpp")
+    add_includedirs("src/imgui/","src/imgui/backends/")
     add_files("src/**.cpp")
-    add_packages('imgui','vulkansdk')
+    add_packages('glfw','vulkansdk')
 
     add_defines('APP_USE_UNLIMITED_FRAME_RATE')
     if is_mode("release") then
