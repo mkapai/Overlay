@@ -91,7 +91,7 @@ brew install xmake glfw
 ---
 - **程序运行但窗口无法显示/崩溃**：检查 Vulkan 驱动、验证层输出，运行 `vulkaninfo`（或 Windows 的 Vulkan SDK 工具）查看设备与实例支持情况。
 - **找不到 GLFW / 链接错误**：确认已安装对应开发包（`libglfw3-dev` / vcpkg 或手动构建并将路径暴露给 `xmake`）。
-- **Linux上背景不透明**：需要确认目标Surface是否支持*VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR*或*VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR*,目前使用wayland_Surface 可能在某些驱动或者平台上不支持!
+- **Linux上背景不透明**：需要确认目标Surface是否支持*VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR*或*VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR*,目前使用VK_KHR_wayland_surface 可能在某些驱动或者平台上不支持!
 
 
 ImGui 源码修改说明
