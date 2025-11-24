@@ -1,6 +1,7 @@
 add_rules("mode.debug", "mode.release")
 
 add_requires("vulkansdk")
+add_requires("glfw",{configs={wayland=true}})
 add_requires("imgui v1.91.0-docking",{configs={glfw_vulkan=true,freetype=false  }})
 target("Overlay")
     set_languages("c99","c++20")
