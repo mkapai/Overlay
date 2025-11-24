@@ -19,7 +19,7 @@ target("Overlay")
     end 
     add_includedirs("src/imgui/","src/imgui/backends/")
     add_files("src/**.cpp")
-    add_packages('libxkbcommon','glfw','vulkansdk')
+    add_packages('glfw','vulkansdk')
 
     add_defines('APP_USE_UNLIMITED_FRAME_RATE')
     if is_mode("release") then
