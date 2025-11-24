@@ -11,12 +11,12 @@ target("Overlay")
     set_languages("c99","c++20")
     set_kind("binary")
 
-    if is_plat("windows") then
-        --set_runtimes("MT")
-    else
-       
-    end
-    
+
+    if is_plat("linux") then
+        add_packages('libxkbcommon')
+    else 
+
+    end 
     add_includedirs("src/imgui/","src/imgui/backends/")
     add_files("src/**.cpp")
     add_packages('libxkbcommon','glfw','vulkansdk')
