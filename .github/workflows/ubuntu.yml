@@ -23,7 +23,7 @@ jobs:
     - name: install_vulkan_sdk
       run: |
         sudo apt update -y
-        sudo apt install -y libvulkan1 libvulkan-dev vulkan-tools vulkan-validationlayers mesa-vulkan-drivers
+        sudo apt install -y libvulkan1 libvulkan-dev vulkan-tools vulkan-validationlayers mesa-vulkan-drivers libxkbcommon-dev
     - run: cd ${{ github.workspace }}
     - name: SetConfig
       run: xmake config -m release -y -v
