@@ -2,6 +2,7 @@ add_rules("mode.debug", "mode.release")
 
 add_requires("vulkansdk")
 if is_plat("linux") then
+    add_requires("libxkbcommon")
     add_requires("glfw",{configs={wayland=true}})
 else
     add_requires("glfw")
@@ -18,7 +19,7 @@ target("Overlay")
     
     add_includedirs("src/imgui/","src/imgui/backends/")
     add_files("src/**.cpp")
-    add_packages('glfw','vulkansdk')
+    add_packages('libxkbcommon','glfw','vulkansdk')
 
     add_defines('APP_USE_UNLIMITED_FRAME_RATE')
     if is_mode("release") then
