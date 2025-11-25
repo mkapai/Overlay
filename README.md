@@ -28,58 +28,24 @@ xmake
 ./build/linux/x86_64/debug/Overlay
 ```
 
-着色器（SPV）
----
-项目中包含 Vulkan 着色器源文件，脚本 `imgui/backends/vulkan/generate_spv.sh` 用于生成 SPV 二进制。该脚本依赖 `glslangValidator` 或 Vulkan SDK 中的 shader 编译工具。
-
 各平台依赖与安装
 ---
 以下为常见平台的依赖说明与常用安装命令示例。请根据你使用的发行版或包管理器做相应调整，或直接参考官方文档（Vulkan SDK、GLFW、xmake）。
 
 Linux（Debian / Ubuntu 为例）
-- **必备**: `xmake`, `build-essential`/`clang`, `glfw` 开发包, `vulkan` 开发包, `glslangValidator`（或 Vulkan SDK）
+- **必备**: `xmake`, `libxkbcommon`,`Vulkan SDK`
 - **示例命令**：
 
 ```bash
-# 更新包索引并安装依赖（包含 libxkbcommon-dev）
-sudo apt update
-sudo apt install -y build-essential git xz-utils curl libglfw3-dev libxkbcommon-dev libvulkan-dev vulkan-utils glslang-tools
 # 安装 xmake（官方安装脚本）
 curl -fsSL https://xmake.io/shget.text | bash
+# 更新包索引并安装依赖 xmake 能处理一部分包 但是libxkbcommon包xamke无法处理 我们就本机安装
+sudo apt update
+sudo apt install -y libvulkan1 libvulkan-dev vulkan-tools vulkan-validationlayers mesa-vulkan-drivers libxkbcommon-dev 
 ```
-
-其他发行版：
-- Fedora: `sudo dnf install xmake glfw-devel vulkan-devel glslang`
-- Arch: `sudo pacman -S xmake glfw vulkan-headers vulkan-tools glslang`
 
 Windows
-- **必备**: Visual Studio（含 Desktop 开发用 C++ 工具集）或 MSVC 工具链、Vulkan SDK（LunarG）、GLFW（可用 vcpkg 安装）、xmake。
-- **建议安装方式**：
-  - 安装 Visual Studio 2022（选择「使用 C++ 的桌面开发」工作负载）。
-  - 从 LunarG 下载并安装 Vulkan SDK（会设置 `%VULKAN_SDK%` 环境变量）。
-  - 使用 vcpkg 或手动获取 `glfw`。
-
-```powershell
-# 在 Windows 上可以通过 Scoop/Chocolatey 安装 xmake，或使用 xmake 官方安装方法
-# 示例（仅示意）：
-# scoop install xmake
-# choco install xmake
-
-# 使用 vcpkg 安装库（示例）
-.\vcpkg\vcpkg.exe install glfw3
-```
-
-然后在 Visual Studio 的「x64 Native Tools Command Prompt」或通过 `xmake` 在带有 MSVC 环境的终端中运行 `xmake`。
-
-macOS
-- **必备**: Xcode（命令行工具）、xmake、GLFW、Vulkan 支持（通常通过 LunarG Vulkan SDK + MoltenVK）
-- **示例命令（Homebrew）**：
-
-```bash
-# 安装 xmake 与 glfw
-brew install xmake glfw
-# Vulkan: 建议从 LunarG 官网下载 macOS 版 Vulkan SDK（包含 MoltenVK）并安装
-```
+- Xmake直接编译,确保你拥有任意编译链
 
 构建与调试建议
 ---
@@ -91,7 +57,7 @@ brew install xmake glfw
 ---
 - **程序运行但窗口无法显示/崩溃**：检查 Vulkan 驱动、验证层输出，运行 `vulkaninfo`（或 Windows 的 Vulkan SDK 工具）查看设备与实例支持情况。
 - **找不到 GLFW / 链接错误**：确认已安装对应开发包（`libglfw3-dev` / vcpkg 或手动构建并将路径暴露给 `xmake`）。
-- **Linux上背景不透明**：需要确认目标Surface是否支持*VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR*或*VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR*,目前使用VK_KHR_wayland_surface 可能在某些驱动或者平台上不支持!
+- **Linux上背景不透明**：需要确认目标Surface是否支持*VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR*或*VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR*,目前使用*VK_KHR_wayland_surface*,可能在某些驱动或者平台上不支持!
 
 
 ImGui 源码修改说明

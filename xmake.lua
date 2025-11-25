@@ -14,7 +14,9 @@ target("Overlay")
 
     if is_plat("linux") then
         add_packages('libxkbcommon')
+        add_defines("__linux__")
     else 
+        add_defines("__windows__")
 
     end 
     add_includedirs("src/imgui/","src/imgui/backends/")

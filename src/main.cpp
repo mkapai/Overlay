@@ -114,6 +114,37 @@ static void SetupVulkan(ImVector<const char*> instance_extensions)
 #ifdef IMGUI_IMPL_VULKAN_USE_VOLK
     volkInitialize();
 #endif
+#ifdef __linux__
+    {
+        bool has_wayland_surface = false;
+        for (int i = 0; i < instance_extensions.size(); i++) {
+            if (strcmp(instance_extensions[i], "VK_KHR_wayland_surface") == 0) {
+                has_wayland_surface = true;
+                break;
+            }
+        }
+        if (has_wayland_surface) {
+            // 检查系统是否支持 VK_KHR_wayland_surface
+            uint32_t extension_count = 0;
+            err = vkEnumerateInstanceExtensionProperties(nullptr, &extension_count, nullptr);
+            check_vk_result(err);
+
+            ImVector<VkExtensionProperties> available_extensions;
+            available_extensions.resize(extension_count);
+            err = vkEnumerateInstanceExtensionProperties(nullptr, &extension_count, available_extensions.Data);
+            check_vk_result(err);
+
+            if (!IsExtensionAvailable(available_extensions, "VK_KHR_wayland_surface")) {
+                fprintf(stderr, "[vulkan] Error: VK_KHR_wayland_surface is not available on this system.\n");
+                abort();
+            }
+        }
+        if(!has_wayland_surface){
+            printf("Warning: VK_KHR_wayland_surface not enabled in instance extensions.\n");
+            abort();
+        }
+    }
+#endif
 
     // Create Vulkan Instance
     {
@@ -386,6 +417,12 @@ static void FramePresent(ImGui_ImplVulkanH_Window* wd)
 // Main code
 int main(int, char**)
 {
+#ifdef __linux__
+    if (!glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_WAYLAND)) {
+        printf("GLFW: Failed to set GLFW_PLATFORM_WAYLAND\n");
+        return 1;
+    }
+#endif
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
         return 1;
@@ -408,10 +445,15 @@ int main(int, char**)
         extensions.push_back(glfw_extensions[i]);
     SetupVulkan(extensions);
 
+
+
+
     // Create Window Surface
     VkSurfaceKHR surface;
     VkResult err = glfwCreateWindowSurface(g_Instance, window, g_Allocator, &surface);
     check_vk_result(err);
+    //linux下需要确保VK_KHR_wayland_surface可用
+
 
     // Create Framebuffers
     int w, h;
