@@ -63,8 +63,7 @@ Windows
 
 ImGui 源码修改说明
 ---
-- 仓库包含 Dear ImGui 的源码在 `imgui/` 目录下。为便于本项目集成，仓库只对 ImGui 的 Vulkan 后端实现做了局部修改。
-- 仅修改的文件：`imgui/backends/imgui_impl_vulkan.cpp`。
+- 仓库包含 Dear ImGui 的源码在 `imgui/` 目录下。为便于本项目集成，仓库对 ImGui 实现做了局部修改。
 - 这些修改用于项目的 Vulkan 后端集成（构建/兼容性/行为调整）。
 
 许可证
