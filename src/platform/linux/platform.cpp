@@ -1,18 +1,38 @@
 #include "platform.h"
 #include <GLFW/glfw3.h>
+#include "input_device.h"
 
 bool input_init()
 {
-    //Linux平台需要启动线程从/dev/input/event 中获取鼠标和键盘设备  并且监听按键状态
-    return true;
+    return InputDevice::start([](double time, int code, int val){
+        //处理按键事件
+        printf("Time: %.6f, Code: %d, Value: %d\n", time, code, val);
+    });
 }
 
 
 std::int32_t input_key_state(std::int32_t key_code)
 {
-    //待完成
+
+    
+    
     return 0;
 }
+std::int32_t input_name_state(std::string key_name){
+    int code = input_name_key(key_name);
+    return input_key_state(code);
+}
+
+std::string input_key_name(std::int32_t key_code){
+    return KeyMapper::GetName(key_code);
+}
+
+std::int32_t input_name_key(std::string key_name){
+    return KeyMapper::GetCode(key_name);
+}
+
+
+
 
 bool windows_passthrough(std::uintptr_t hwnd, bool enable)
 {

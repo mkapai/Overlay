@@ -423,6 +423,7 @@ static void FramePresent(ImGui_ImplVulkanH_Window* wd)
 // Main code
 int main(int, char**)
 {
+    
 #ifdef __linux__
     if (!glfwPlatformSupported(GLFW_PLATFORM_WAYLAND)) {
         printf("GLFW: Failed to set GLFW_PLATFORM_WAYLAND\n");
@@ -444,7 +445,7 @@ int main(int, char**)
     glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
     GLFWmonitor* monitor = glfwGetPrimaryMonitor();
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-
+    input_init();
     GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "Imgui"" - PiP", nullptr, nullptr);
     if (!glfwVulkanSupported())
     {

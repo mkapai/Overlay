@@ -9,6 +9,7 @@ bool input_init()
 
 std::int32_t input_key_state(std::int32_t key_code)
 {
+    //也可以使用GetKeyboardState函数获取按键状态
     //使用GetAsyncKeyState获取按键状态
     auto state = GetAsyncKeyState(key_code);
     if (state & 0x8000) //最高位表示按键是否被按下
