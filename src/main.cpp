@@ -33,6 +33,8 @@
 #ifdef _DEBUG
 #define APP_USE_VULKAN_DEBUG_REPORT
 #endif
+#include "platform.h"
+
 
 // Data
 static VkAllocationCallbacks*   g_Allocator = nullptr;
@@ -51,6 +53,10 @@ static bool                     g_SwapChainRebuild = false;
 
 static void glfw_error_callback(int error, const char* description)
 {
+    //屏蔽65548错误
+    if (error == 65548) return;
+
+
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
 static void check_vk_result(VkResult err)
@@ -430,7 +436,6 @@ int main(int, char**)
 
     // Create window with Vulkan context
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-    glfwWindowHint(GLFW_MOUSE_PASSTHROUGH, GLFW_TRUE);
     glfwWindowHint(GLFW_FLOATING, GLFW_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
     glfwWindowHint(GLFW_FOCUSED, GLFW_FALSE);
@@ -453,7 +458,9 @@ int main(int, char**)
     for (uint32_t i = 0; i < extensions_count; i++)
         extensions.push_back(glfw_extensions[i]);
     SetupVulkan(extensions);
+    
 
+    windows_passthrough((std::uintptr_t)window, false);
 
 
 
@@ -536,7 +543,12 @@ int main(int, char**)
     glfwSetKeyCallback(window, [](GLFWwindow *window, int key, int scancode, int action, int mods){
         if (action == GLFW_PRESS) {
             //打印按键信息
+
+
             printf("Key Pressed: %d (scancode: %d, mods: %d)\n", key, scancode, mods);
+            if(key = 321){
+                windows_passthrough((std::uintptr_t)window, true);
+            }
         } 
 
     });
