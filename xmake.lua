@@ -15,12 +15,16 @@ target("Overlay")
     if is_plat("linux") then
         add_packages('libxkbcommon')
         add_defines("__linux__")
+        add_includedirs("src/platform/linux/")
+        add_files("src/platform/linux/**.cpp")
+
     else 
         add_defines("__windows__")
-
+        add_includedirs("src/platform/windows/")
+        add_files("src/platform/windows/**.cpp")
     end 
-    add_includedirs("src/imgui/","src/imgui/backends/")
-    add_files("src/**.cpp")
+    add_includedirs("src/imgui/","src/imgui/backends/","src/platform/")
+    add_files("src/main.cpp","src/imgui/**.cpp")
     add_packages('glfw','vulkansdk')
 
     add_defines('APP_USE_UNLIMITED_FRAME_RATE')
