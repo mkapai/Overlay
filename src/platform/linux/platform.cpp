@@ -1,5 +1,8 @@
 #include "platform.h"
+#define GLFW_EXPOSE_NATIVE_WAYLAND
 #include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
+
 #include "input_device.h"
 
 bool input_init()
@@ -33,18 +36,20 @@ std::int32_t input_name_key(std::string key_name)
 
 bool windows_passthrough(std::uintptr_t hwnd, bool enable)
 {
+    GLFWwindow* w = (GLFWwindow *)hwnd;
     if (enable)
     {
         //不切换窗口 无法切换鼠标穿透 状态!
-        glfwSetWindowAttrib((GLFWwindow *)hwnd, GLFW_MOUSE_PASSTHROUGH, GLFW_TRUE);
-        int w, h;
-        glfwGetFramebufferSize((GLFWwindow *)hwnd, &w, &h);
-        glfwSetWindowSize((GLFWwindow *)hwnd, w-5, h-5);
-        glfwSetWindowSize((GLFWwindow *)hwnd, w, h);
+        glfwSetWindowAttrib(w, GLFW_MOUSE_PASSTHROUGH, GLFW_TRUE);
+        auto surface = glfwGetWaylandWindow(w); //触发commit
+        //wl_surface_commit(surface);
+
     }
     else
     {
-        glfwSetWindowAttrib((GLFWwindow *)hwnd, GLFW_MOUSE_PASSTHROUGH, GLFW_FALSE);
+        glfwSetWindowAttrib(w, GLFW_MOUSE_PASSTHROUGH, GLFW_FALSE);
+        auto surface = glfwGetWaylandWindow(w); //触发commit
+        //wl_surface_commit(surface);
     }
     return true;
 }
