@@ -59,7 +59,7 @@ Windows
 - **找不到 GLFW / 链接错误**：确认已安装对应开发包（`libglfw3-dev` / vcpkg 或手动构建并将路径暴露给 `xmake`）。
 - **Linux上背景不透明**：需要确认目标Surface是否支持*VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR*或*VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR*,目前使用*VK_KHR_wayland_surface*,可能在某些驱动或者平台上不支持!
 - **Linux窗口无法置顶**: Gnome 可以安装插件pip-on-top,其他需要自己设置!(wayland不允许窗口自己设置!)
-
+- **linux下调试说明**: 一般调试 不是root 权限运行,会导致 */dev/input/* 不可读 可以执行 *sudo usermod -aG input $USER*
 
 ImGui 源码修改说明
 ---
