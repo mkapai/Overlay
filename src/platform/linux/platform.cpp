@@ -50,6 +50,7 @@ bool windows_passthrough(std::uintptr_t hwnd, bool enable)
         glfwSetWindowAttrib(w, GLFW_MOUSE_PASSTHROUGH, GLFW_FALSE);
         auto surface = glfwGetWaylandWindow(w); //触发commit
         //wl_surface_commit(surface);
+        //window->wl.surface
     }
     return true;
 }
