@@ -36,21 +36,30 @@ std::int32_t input_name_key(std::string key_name)
 
 bool windows_passthrough(std::uintptr_t hwnd, bool enable)
 {
-    GLFWwindow* w = (GLFWwindow *)hwnd;
+    GLFWwindow *w = (GLFWwindow *)hwnd;
     if (enable)
     {
-        //不切换窗口 无法切换鼠标穿透 状态!
+        // 不切换窗口 无法切换鼠标穿透 状态!
         glfwSetWindowAttrib(w, GLFW_MOUSE_PASSTHROUGH, GLFW_TRUE);
-        auto surface = glfwGetWaylandWindow(w); //触发commit
-        //wl_surface_commit(surface);
-
+        struct wl_surface *surface = glfwGetWaylandWindow(window);
+        if (surface)
+        {
+            wl_surface_commit(surface);
+        }
+        glfwSetWindowAttrib(w, GLFW_VISIBLE, GLFW_FALSE);
+        glfwSetWindowAttrib(w, GLFW_VISIBLE, GLFW_TRUE);
     }
     else
     {
         glfwSetWindowAttrib(w, GLFW_MOUSE_PASSTHROUGH, GLFW_FALSE);
-        auto surface = glfwGetWaylandWindow(w); //触发commit
-        //wl_surface_commit(surface);
-        //window->wl.surface
+        auto surface = glfwGetWaylandWindow(w);
+        struct wl_surface *surface = glfwGetWaylandWindow(window);
+        if (surface)
+        {
+            wl_surface_commit(surface);
+        }
+        glfwSetWindowAttrib(w, GLFW_VISIBLE, GLFW_FALSE);
+        glfwSetWindowAttrib(w, GLFW_VISIBLE, GLFW_TRUE);
     }
     return true;
 }
