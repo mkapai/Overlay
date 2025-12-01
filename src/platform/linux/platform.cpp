@@ -46,8 +46,8 @@ bool windows_passthrough(std::uintptr_t hwnd, bool enable)
         {
             wl_surface_commit(surface);
         }
-        glfwSetWindowAttrib(w, GLFW_VISIBLE, GLFW_FALSE);
-        glfwSetWindowAttrib(w, GLFW_VISIBLE, GLFW_TRUE);
+        //glfwSetWindowAttrib(w, GLFW_VISIBLE, GLFW_FALSE);
+        //glfwSetWindowAttrib(w, GLFW_VISIBLE, GLFW_TRUE);
     }
     else
     {
@@ -58,8 +58,8 @@ bool windows_passthrough(std::uintptr_t hwnd, bool enable)
         {
             wl_surface_commit(surface);
         }
-        glfwSetWindowAttrib(w, GLFW_VISIBLE, GLFW_FALSE);
-        glfwSetWindowAttrib(w, GLFW_VISIBLE, GLFW_TRUE);
+        //glfwSetWindowAttrib(w, GLFW_VISIBLE, GLFW_FALSE);
+        //glfwSetWindowAttrib(w, GLFW_VISIBLE, GLFW_TRUE);
     }
     return true;
 }
