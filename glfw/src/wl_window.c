@@ -2608,10 +2608,14 @@ void _glfwSetWindowMousePassthroughWayland(_GLFWwindow* window, GLFWbool enabled
     {
         struct wl_region* region = wl_compositor_create_region(_glfw.wl.compositor);
         wl_surface_set_input_region(window->wl.surface, region);
+        wl_surface_commit(window->wl.surface);
         wl_region_destroy(region);
     }
     else
+    {
         wl_surface_set_input_region(window->wl.surface, NULL);
+        wl_surface_commit(window->wl.surface);
+    }
 }
 
 float _glfwGetWindowOpacityWayland(_GLFWwindow* window)
