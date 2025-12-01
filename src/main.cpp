@@ -423,18 +423,20 @@ static void FramePresent(ImGui_ImplVulkanH_Window* wd)
 // Main code
 int main(int, char**)
 {
-    input_init();
+    
 #ifdef __linux__
     if (!glfwPlatformSupported(GLFW_PLATFORM_WAYLAND)) {
         printf("GLFW: Failed to set GLFW_PLATFORM_WAYLAND\n");
         return 1;
     }
     glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_WAYLAND);
+    glfwInitHint(GLFW_WAYLAND_LIBDECOR, GLFW_WAYLAND_PREFER_LIBDECOR);
 #endif
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
         return 1;
 
+    input_init();
     // Create window with Vulkan context
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
     glfwWindowHint(GLFW_FLOATING, GLFW_TRUE);
