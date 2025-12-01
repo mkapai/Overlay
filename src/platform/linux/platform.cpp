@@ -59,14 +59,20 @@ bool windows_passthrough(std::uintptr_t hwnd, bool enable)
     printf("Set Window Passthrough: %d\n", enable);
     if (enable)
     {
-        //无法切换鼠标穿透 状态!寻找其他解决方案
+        //无法切换鼠标穿透 状态! 鼠标穿透老是在设置后 必须转移焦点才生效
         glfwSetWindowAttrib(w, GLFW_MOUSE_PASSTHROUGH, GLFW_TRUE);
         auto surface = glfwGetWaylandWindow(w);
         if (surface)
         {
             //wl_surface_attach(surface, NULL, 0, 0);
+            //wl_surface_set_input_region(surface, NULL);
             //wl_surface_commit(surface);
         }
+
+        glfwPollEvents();
+        glfwSetWindowTitle(w, "56456 un_focus"" - PiP");
+        glfwPollEvents();
+
     }
     else
     {
@@ -77,6 +83,7 @@ bool windows_passthrough(std::uintptr_t hwnd, bool enable)
             //wl_surface_attach(surface, NULL, 0, 0);
             //wl_surface_commit(surface);
         }
+        glfwSetWindowTitle(w, "56456"" - PiP");
     }
     return true;
 }
