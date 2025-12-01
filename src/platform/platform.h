@@ -1,6 +1,6 @@
 #pragma once
 #include <chrono>
-#define NowTime std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::steady_clock::now().time_since_epoch()).count()
+#define NowTime std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::system_clock::now().time_since_epoch()).count()
 
 
 #include <string>

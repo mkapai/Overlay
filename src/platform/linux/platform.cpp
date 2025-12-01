@@ -5,19 +5,38 @@
 
 #include "input_device.h"
 
+
 bool input_init()
 {
-    return InputDevice::start([](double time, int code, int val)
-                              {
+    return InputDevice::start([](double time, int code, int val)     
+    {
         //处理按键事件
-        printf("Time: %.6f, Code: %d, Value: %d\n", time, code, val); });
+        printf("Time: %.6f, Code: %d, Value: %d\n", time, code, val); 
+        //todo::把当前按键存储到map中 input_key_state 读取  
+        InputDevice::key_state_map[code] = InputDevice::_KEY_STATE{code,val,time};
+    });
 }
 
 std::int32_t input_key_state(std::int32_t key_code)
 {
-
+    static double t = 0;
+    auto it = InputDevice::key_state_map.find(key_code);
+    if(it != InputDevice::key_state_map.end()){
+        //300ms 内有效 t是上次触发时间 间隔要求为300ms之间
+        if(t == 0){
+            t = it->second.time;
+            return it->second.value;
+        }
+        else if(it->second.time - t > 0.3){
+            t = it->second.time;
+            return it->second.value;
+        }
+    
+        
+    }
     return 0;
 }
+
 std::int32_t input_name_state(std::string key_name)
 {
     int code = input_name_key(key_name);
@@ -37,29 +56,27 @@ std::int32_t input_name_key(std::string key_name)
 bool windows_passthrough(std::uintptr_t hwnd, bool enable)
 {
     GLFWwindow *w = (GLFWwindow *)hwnd;
+    printf("Set Window Passthrough: %d\n", enable);
     if (enable)
     {
-        // 不切换窗口 无法切换鼠标穿透 状态!
+        //无法切换鼠标穿透 状态!寻找其他解决方案
         glfwSetWindowAttrib(w, GLFW_MOUSE_PASSTHROUGH, GLFW_TRUE);
-        struct wl_surface *surface = glfwGetWaylandWindow(window);
+        auto surface = glfwGetWaylandWindow(w);
         if (surface)
         {
-            wl_surface_commit(surface);
+            //wl_surface_attach(surface, NULL, 0, 0);
+            //wl_surface_commit(surface);
         }
-        //glfwSetWindowAttrib(w, GLFW_VISIBLE, GLFW_FALSE);
-        //glfwSetWindowAttrib(w, GLFW_VISIBLE, GLFW_TRUE);
     }
     else
     {
         glfwSetWindowAttrib(w, GLFW_MOUSE_PASSTHROUGH, GLFW_FALSE);
         auto surface = glfwGetWaylandWindow(w);
-        struct wl_surface *surface = glfwGetWaylandWindow(window);
         if (surface)
         {
-            wl_surface_commit(surface);
+            //wl_surface_attach(surface, NULL, 0, 0);
+            //wl_surface_commit(surface);
         }
-        //glfwSetWindowAttrib(w, GLFW_VISIBLE, GLFW_FALSE);
-        //glfwSetWindowAttrib(w, GLFW_VISIBLE, GLFW_TRUE);
     }
     return true;
 }

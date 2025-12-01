@@ -461,8 +461,9 @@ int main(int, char**)
         extensions.push_back(glfw_extensions[i]);
     SetupVulkan(extensions);
     
+    bool passthrough = false;
 
-    windows_passthrough((std::uintptr_t)window, false);
+    windows_passthrough((std::uintptr_t)window, passthrough);
 
 
 
@@ -542,18 +543,6 @@ int main(int, char**)
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.f, 0.f, 0.f, 0.f);
 
-    glfwSetKeyCallback(window, [](GLFWwindow *window, int key, int scancode, int action, int mods){
-        if (action == GLFW_PRESS) {
-            //打印按键信息
-
-
-            printf("Key Pressed: %d (scancode: %d, mods: %d)\n", key, scancode, mods);
-            if(key = 321){
-                windows_passthrough((std::uintptr_t)window, true);
-            }
-        } 
-
-    });
 
     // Main loop
     while (!glfwWindowShouldClose(window))
@@ -564,6 +553,11 @@ int main(int, char**)
         // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application, or clear/overwrite your copy of the keyboard data.
         // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
         glfwPollEvents();
+
+        if(input_name_state("1") > 0){
+            passthrough = !passthrough;
+            windows_passthrough((std::uintptr_t)window, passthrough);
+        }
 
         // Resize swap chain?
         int fb_width, fb_height;
